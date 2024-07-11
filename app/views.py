@@ -70,6 +70,16 @@ class OrderViewSet(viewsets.ModelViewSet):
         logger.info('New order created')    
         serializer.save(user = self.request.user, total_price = total_price) 
     
+    def perform_update(self, serializer):
+        items = self.request.data.get('items')
+        
+        total_price = 0
+        for item_id in items:
+            item = Menu.objects.get(id=item_id)
+          
+            total_price += item.price
+        serializer.save(total_price=total_price)            
+    
     @action(detail=True, methods=['post'])
     def cancel(self, request, pk=None):
         order = self.get_object()
@@ -123,5 +133,6 @@ class OrderViewSet(viewsets.ModelViewSet):
                 "road_time": delivery_road_time,
                 "order_items": order_items,
                 "food_cooking_time": food_cooking_time,
+                "order_price": order.total_price ,
                 "delivery_time": total
             })

@@ -75,7 +75,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         order = self.get_object()
         order.status = 'canceled'
         order.save()
-        logger.info('id={pk} Order canceled')
+        logger.info('Order canceled')
         return Response({"status": "canceled"})   
     
     @action(detail=True, methods=['post'])
@@ -83,7 +83,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         order = self.get_object()
         order.status = 'accepted'
         order.save()
-        logger.info('id={pk} Order accepted')
+        logger.info('Order accepted')
         return Response({
             "status": "Order accepted"
         })

@@ -50,7 +50,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         if self.action in ['list', 'update', 'partial_update','destroy']:
             return [IsAdminUser()]
         if self.action in ['retrieve']:
-            return [IsOrderOwnerOrAdmin]
+            return [IsOrderOwnerOrAdmin()]
         return [IsAuthenticated()]
        
     
@@ -113,13 +113,15 @@ class OrderViewSet(viewsets.ModelViewSet):
             order_items = order.items.count()
             food_cooking_time = order_items * (5/4)
 
-            delivery_time = round(distance * 3)
+            delivery_road_time = round(distance * 3)
             
-            total = round(food_cooking_time + delivery_time)
+            total = round(food_cooking_time + delivery_road_time)
             
             return Response({
+                "id": order.id,
                 "distance": distance,
-                "delivery_time": delivery_time,
+                "road_time": delivery_road_time,
                 "order_items": order_items,
-                "total_time": total
+                "food_cooking_time": food_cooking_time,
+                "delivery_time": total
             })
